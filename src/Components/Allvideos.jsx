@@ -1,14 +1,28 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 import Modal from 'react-bootstrap/Modal';
-
+import { getVideo } from '../Services/allApi';
 const Allvideos = () => {
     const [show, setShow] = useState(false);
-
+    const [data,setData]=useState([])
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
-  
+    useEffect(()=>{
+      getAllVideo()
+    })
+  const getAllVideo=async()=>{
+   try{
+    let response= await getVideo()
+    if(response.status>=200 && response.status<=300){
+    setData(response.data)
+    }else[
+      console.error(response.statusText);
+    ]
+   }catch{
+    console.error("Error Occured")
+   }
+  }
   return (
 
   <>

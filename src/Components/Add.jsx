@@ -4,12 +4,66 @@ import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import Form from 'react-bootstrap/Form';
+import { uploadVideo } from '../Services/allApi';
 
 export const Add = () => {
-    const [show, setShow] = useState(false);
 
+    const [error,setError]=useState(false)
+    const [video,setVideo]=useState({
+        caption:"",
+        url:"",
+        videoURL:""
+    });
+
+    const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
+    const seperateUrl=(value)=>{
+      console.log(value);
+      
+        if(value.includes('.be/')) {
+            console.log(value);
+            const videoId=value.split(".be/")[1]
+            setVideo({...video,videoURL:videoId})
+
+            
+        }else{
+            setError(true);
+            console.error("invalid entry")
+        }
+
+       
+        
+    }
+
+
+
+
+    const handleSave= async()=>{
+        if(video.caption&&video.url&& video.videoURL){
+            // console.log("Success");
+            try{
+            let response=    await uploadVideo(video);
+                    if(response.status>=200 && response.status<=300){
+                        alert("Successfully added your video");
+                        setShow(false);
+                        setVideo({
+                            caption:"",
+                            url:"",
+                            videoURL:""
+                        });
+                    }else{
+                        alert("An Error O ccured ");
+                    }
+            } catch{
+                alert("Error Occured")
+            }
+            
+        }else{
+            alert("Please fill the form...");
+        }
+}
+
     return (
         <>
             <div>
@@ -26,20 +80,24 @@ export const Add = () => {
                         label="video caption"
                         className="mb-2"
                     >
-                        <Form.Control type="text" placeholder="Video" />
+                        <Form.Control onChange={(e)=>{setVideo({...video,caption:e.target.value})}} type="text" placeholder="Video" />
                     </FloatingLabel>
                     <FloatingLabel className="mb-2" controlId="floatingInput" label="video Image URL">
-                        <Form.Control type="text" placeholder="Video image URL" />
+                        <Form.Control onChange={(e)=>{setVideo({...video,url:e.target.value})}} type="text" placeholder="Video image URL" />
                     </FloatingLabel>
                     <FloatingLabel className="mb-2" controlId="floatingInput" label="video Youtube URL">
-                        <Form.Control type="text" placeholder="Video Video URL" />
+                        <Form.Control onChange={(e)=>seperateUrl(e.target.value)} type="text" placeholder="Video Video URL" />
                     </FloatingLabel>
+                   { error?
+                    <div >
+                            <p className='text-danger'>Enter valid Youtube Link</p>     
+                    </div>:""}
                 </Modal.Body>
                 <Modal.Footer>
                     <Button className='rounded' variant="secondary" onClick={handleClose}>
                         Cancel
                     </Button>
-                    <Button className='rounded' variant="primary" onClick={handleClose}>
+                    <Button className='rounded' variant="primary" onClick={handleSave}>
                        ADD
                     </Button>
                 </Modal.Footer>
