@@ -7,6 +7,8 @@ const commonApi= async(method,endPoint,requestBody)=>{
         url:baseUrl+endPoint,
         data:requestBody
     }
+    // console.log(requestConfig);
+    
     return await axios(requestConfig).then((res)=>{
         return res;
     }).catch((error)=>{

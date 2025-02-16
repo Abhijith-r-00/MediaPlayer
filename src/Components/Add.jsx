@@ -41,9 +41,13 @@ export const Add = () => {
 
     const handleSave= async()=>{
         if(video.caption&&video.url&& video.videoURL){
+            // console.log(video);
+            
             // console.log("Success");
             try{
-            let response=    await uploadVideo(video);
+            let response=await uploadVideo(video);
+            console.log(response);
+            
                     if(response.status>=200 && response.status<=300){
                         alert("Successfully added your video");
                         setShow(false);
@@ -53,10 +57,10 @@ export const Add = () => {
                             videoURL:""
                         });
                     }else{
-                        alert("An Error O ccured ");
+                        alert("An Error Occured ");
                     }
             } catch{
-                alert("Error Occured")
+                alert("Error Oc  cured")
             }
             
         }else{
