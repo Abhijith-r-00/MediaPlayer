@@ -6,7 +6,7 @@ import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import Form from 'react-bootstrap/Form';
 import { uploadVideo } from '../Services/allApi';
 
-export const Add = () => {
+export const Add = ({setVideoResp}) => {
 
     const [error,setError]=useState(false)
     const [video,setVideo]=useState({
@@ -47,6 +47,7 @@ export const Add = () => {
             try{
             let response=await uploadVideo(video);
             console.log(response);
+            setVideoResp(response)
             
                     if(response.status>=200 && response.status<=300){
                         alert("Successfully added your video");
