@@ -3,7 +3,7 @@ import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
 import Modal from "react-bootstrap/Modal";
 import { addHistory, allVideoDelete, getVideo } from "../Services/allApi";
-const Allvideos = ({videoResp}) => {
+const Allvideos = ({ videoResp, allvideoDeletedresponse }) => {
   const [selectVideo, setSelectedVideo] = useState([]);
   const [show, setShow] = useState(false);
   const [data, setData] = useState([]);
@@ -11,27 +11,27 @@ const Allvideos = ({videoResp}) => {
   const handleShow = async (dataItem) => {
     // try{
 
-    let currentDate= new Date()
-    let timeStamp=currentDate.toLocaleString('en-IN',{timeZoneName:'short'});
-    const{caption,videoURL}=dataItem
-    const payload={caption,videoURL,timeStamp}
-    try{
-      let apiResponse=await addHistory(payload);
-
-    }catch(error){
-          console.log(error);
-          
+    let currentDate = new Date();
+    let timeStamp = currentDate.toLocaleString("en-IN", {
+      timeZoneName: "short",
+    });
+    const { caption, videoURL } = dataItem;
+    const payload = { caption, videoURL, timeStamp };
+    try {
+      let apiResponse = await addHistory(payload);
+    } catch (error) {
+      console.log(error);
     }
 
     // }
     // console.log(dataItem);
-    
+
     setSelectedVideo(dataItem);
     setShow(true);
   };
   useEffect(() => {
     getAllVideo();
-  }, [videoResp]);
+  }, [videoResp, allvideoDeletedresponse]);
   const getAllVideo = async () => {
     try {
       let response = await getVideo();
@@ -46,16 +46,18 @@ const Allvideos = ({videoResp}) => {
       console.error("Error Occured");
     }
   };
-  const deleteVideo =async(id)=>{
-    try{
-            await allVideoDelete(id);
-            getAllVideo();
-    }catch(error)
-    {
+  const deleteVideo = async (id) => {
+    try {
+      await allVideoDelete(id);
+      getAllVideo();
+    } catch (error) {
       console.log(error);
-      
     }
-  }
+  };
+  const onVideoDrag = (e, id) => {
+    e.dataTransfer.setData("VideoId", id);
+    // console.log(e,id);
+  };
   return (
     <>
       <div>
@@ -63,15 +65,18 @@ const Allvideos = ({videoResp}) => {
         <div className="container">
           <div className="row">
             {data.map((dataItem, index) => (
-              <div key={index} className="col-md-4 mb-3 align-items-stretch">
+              <div key={index} className="col mb-3  align-items-stretch">
                 {" "}
                 {/* 3 cards per row on medium+ screens */}
                 <Card
                   draggable={true}
-                  onDragStart={(e)=>onVideoDrag(e,dataItem.id)}
-                  style={{ width: "100%", backgroundColor: "#f0f5f5" }}
+                  onDragStart={(e) => onVideoDrag(e, dataItem.id)}
+                  style={{
+                    minHeight: "200px",
+                    width: "100%",
+                    backgroundColor: "#f0f5f5",
+                  }}
                   className="h-100 rounded border-0 shadow"
-                  
                 >
                   <Card.Img
                     style={{ objectFit: "cover" }}
@@ -79,12 +84,17 @@ const Allvideos = ({videoResp}) => {
                     height={"150px"}
                     src={dataItem.url}
                     className="rounded"
-                    onClick={()=>handleShow(dataItem)}
+                    onClick={() => handleShow(dataItem)}
                   />
                   <Card.Body>
                     <div className="d-flex justify-content-between">
-                      <Card.Title onClick={()=>handleShow(dataItem)}>{dataItem.caption}</Card.Title>
-                      <button className="btn rounded border-0" onClick={()=>deleteVideo(dataItem.id)}>
+                      <Card.Title onClick={() => handleShow(dataItem)}>
+                        {dataItem.caption}
+                      </Card.Title>
+                      <button
+                        className="btn rounded border-0"
+                        onClick={() => deleteVideo(dataItem.id)}
+                      >
                         <i className="fa-solid fa-trash text-danger"></i>
                       </button>
                     </div>
@@ -93,7 +103,7 @@ const Allvideos = ({videoResp}) => {
               </div>
             ))}
           </div>
-        </div>  
+        </div>
         {selectVideo && (
           <Modal show={show} onHide={handleClose} centered size="lg">
             <Modal.Header closeButton>

@@ -1,30 +1,36 @@
-import React, { useState } from 'react'
-import { Add } from './Add'
-import { Link } from 'react-router-dom'
-import Allvideos from './Allvideos'
-import Allcategories from './Allcategories'
+import React, { useState } from "react";
+import { Add } from "./Add";
+import { Link } from "react-router-dom";
+import Allvideos from "./Allvideos";
+import Allcategories from "./Allcategories";
 const Content = () => {
-  const [videoresponse,setVideoResponse]=useState("")
+  const [videoresponse, setVideoResponse] = useState("");
+  const [allvideoDeletedresponse, setAllvideoDeletedresponse] = useState("");
   return (
-    <div className='container'>
-      <div className='d-flex justify-content-between py-5 '>
+    <div className="container">
+      <div className="d-flex justify-content-between py-5 ">
         <div>
-          < Add setVideoResp={setVideoResponse}/>
+          <Add setVideoResp={setVideoResponse} />
         </div>
         <div>
-          <Link to={'/history'}>Watch History</Link>
+          <Link to={"/history"}>Watch History</Link>
         </div>
       </div>
-      <div className='d-flex justify-content-between py-5 '>
+      <div className="d-flex justify-content-between py-5 ">
         <div>
-          < Allvideos videoResp={videoresponse}/>
+          <Allvideos
+            videoResp={videoresponse}
+            allvideoDeletedresponse={allvideoDeletedresponse}
+          />
         </div>
         <div>
-          <Allcategories/>
+          <Allcategories
+            setAllvideoDeletedresponse={setAllvideoDeletedresponse}
+          />
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Content
+export default Content;
