@@ -5,6 +5,7 @@ import Allvideos from "./Allvideos";
 import Allcategories from "./Allcategories";
 const Content = () => {
   const [videoresponse, setVideoResponse] = useState("");
+  const [categoryvideoDeletedresponse, setcategoryvideoDeletedresponse] = useState("");
   const [allvideoDeletedresponse, setAllvideoDeletedresponse] = useState("");
   return (
     <div className="container">
@@ -21,10 +22,12 @@ const Content = () => {
           <Allvideos
             videoResp={videoresponse}
             allvideoDeletedresponse={allvideoDeletedresponse}
+            setcategoryvideoDeletedresponse={setcategoryvideoDeletedresponse}
           />
         </div>
         <div>
           <Allcategories
+          categoryvideoDeletedresponse={categoryvideoDeletedresponse}
             setAllvideoDeletedresponse={setAllvideoDeletedresponse}
           />
         </div>

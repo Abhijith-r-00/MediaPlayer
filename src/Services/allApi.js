@@ -35,3 +35,6 @@ export const getSingleVideo =async(id)=>{
 export const updateCatagoryVideo =async(id,catagoryDetails)=>{
     return await commonApi("put",`/Category/${id}`,catagoryDetails)
 }
+export const findCategory =async(id)=>{
+    return await commonApi("get",`/Category/${id}`,"")
+}

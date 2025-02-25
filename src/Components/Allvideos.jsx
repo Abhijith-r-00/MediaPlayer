@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
 import Modal from "react-bootstrap/Modal";
-import { addHistory, allVideoDelete, getVideo } from "../Services/allApi";
-const Allvideos = ({ videoResp, allvideoDeletedresponse }) => {
+import { addHistory, allVideoDelete, findCategory, getVideo, updateCatagoryVideo, uploadVideo } from "../Services/allApi";
+const Allvideos = ({ videoResp, allvideoDeletedresponse ,setcategoryvideoDeletedresponse }) => {
   const [selectVideo, setSelectedVideo] = useState([]);
   const [show, setShow] = useState(false);
   const [data, setData] = useState([]);
@@ -58,14 +58,38 @@ const Allvideos = ({ videoResp, allvideoDeletedresponse }) => {
     e.dataTransfer.setData("VideoId", id);
     // console.log(e,id);
   };
+  const onDragDiv=(e)=>{
+    e.preventDefault()
+  }
+  const onVideoDrop=async(e)=>{
+    let {video,categoryId}=JSON.parse(e.dataTransfer.getData("categoryVideo"))
+    // console.log(catData);
+    await uploadVideo(video);
+    getAllVideo();
+    // get
+    let resp = await findCategory(categoryId)
+    let currentAllVideo=resp.data.allvideos
+    let sortedVideos=currentAllVideo.filter((item)=>item.id!=video.id)
+const payload={
+  id:categoryId,
+  catagory: resp.data.catagory,
+  allvideos:sortedVideos
+  
+
+}
+let response=await  updateCatagoryVideo(categoryId,payload)
+setcategoryvideoDeletedresponse(response)
+    // {videoResp,catId}=catData
+
+  }
   return (
     <>
-      <div>
+      <div style={{minHeight:"500px"}} onDragOver={(e)=>onDragDiv(e)} onDrop={(e)=>onVideoDrop(e)}>
         <h2>All Videos</h2>
         <div className="container">
-          <div className="row">
+          <div className="row ">
             {data.map((dataItem, index) => (
-              <div key={index} className="col mb-3  align-items-stretch">
+              <div key={index} className="col-md-4 mb-3  align-items-stretch">
                 {" "}
                 {/* 3 cards per row on medium+ screens */}
                 <Card

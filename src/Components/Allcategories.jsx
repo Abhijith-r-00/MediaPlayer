@@ -13,7 +13,7 @@ import {
   updateCatagoryVideo,
 } from "../Services/allApi";
 
-const Allcategories = ({ setAllvideoDeletedresponse }) => {
+const Allcategories = ({ setAllvideoDeletedresponse,categoryvideoDeletedresponse}) => {
   const [catagory, setCatagory] = useState("");
   const [data, setData] = useState("");
   const [videoData, setVideoData] = useState("");
@@ -27,7 +27,7 @@ const Allcategories = ({ setAllvideoDeletedresponse }) => {
 
   useEffect(() => {
     getNewCatagory();
-  }, []);
+  }, [categoryvideoDeletedresponse]);
   const getNewCatagory = async () => {
     try {
       let resp = await getCatagory();
@@ -132,7 +132,7 @@ const Allcategories = ({ setAllvideoDeletedresponse }) => {
                 <div draggable={true}  onDragStart={(e)=>handleCategoryDrag(e,val.id,a)} key={index} className="col-6">
                   <Card
                     
-                    onDragStart={(e) => onVideoDragfromCategory(e, aid)}
+                    onDragStart={(e) => handleCategoryDrag(e,val.id,a)}
                     style={{
                       minHeight: "200px",
                       width: "80%",
